@@ -1,15 +1,18 @@
-FROM node:alpine
-
+FROM node:alpine AS base
+WORKDIR /usr/src/app
 ENV MONGODB_CONNECTION=mongodb://mongo:27017/contentdb
 
+FROM node:argon AS build
 WORKDIR /usr/src/app
 
-COPY package*.json /usr/src/app/
-
+# Install app dependencies
+COPY package.json /usr/src/app/
 RUN npm install
 
-EXPOSE 3001
+# Bundle app source
+COPY . /usr/src/app
 
-COPY . /usr/src/app/
-
-ENTRYPOINT [ "node" , "server.js" ]
+FROM base as final
+WORKDIR /usr/src/app
+COPY --from=build /usr/src/app .
+CMD [ "npm", "start" ]
