@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:dubnium AS build
 
 ENV CONTENT_API_URL=http://api:3001
 
