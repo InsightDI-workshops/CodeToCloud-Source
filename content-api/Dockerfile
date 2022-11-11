@@ -4,11 +4,11 @@ WORKDIR /usr/src/app
 EXPOSE 3001
 ENV MONGODB_CONNECTION=mongodb://mongo:27017/contentdb
 
-FROM node:argon AS build
+FROM node:carbon-alpine AS build
 WORKDIR /usr/src/app
 
 # Install app dependencies
-COPY package.json /usr/src/app/
+COPY package*.json /usr/src/app/
 RUN npm install
 
 # Bundle app source
