@@ -1,20 +1,15 @@
-FROM node:alpine AS base
-RUN apk -U add curl
-WORKDIR /usr/src/app
-EXPOSE 3001
+FROM node:alpine
+
 ENV MONGODB_CONNECTION=mongodb://mongo:27017/contentdb
 
-FROM node:argon AS build
 WORKDIR /usr/src/app
 
-# Install app dependencies
-COPY package.json /usr/src/app/
+COPY package*.json /usr/src/app/
+
 RUN npm install
 
-# Bundle app source
-COPY . /usr/src/app
+EXPOSE 3001
 
-FROM base AS final
-WORKDIR /usr/src/app
-COPY --from=build /usr/src/app .
-CMD [ "npm", "start" ]
+COPY . /usr/src/app/
+# start here references the start script in package.json, it just runs the server.js file, which is what we did in sub module 2
+ENTRYPOINT ["npm", "start"]
