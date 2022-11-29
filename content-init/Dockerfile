@@ -1,4 +1,4 @@
-FROM node:alpine AS base
+FROM node:alpine
 WORKDIR /usr/src/app
 ENV MONGODB_CONNECTION=mongodb://mongo:27017/contentdb
 
