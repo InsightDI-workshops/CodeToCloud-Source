@@ -1,11 +1,11 @@
 version: "3.4"
 services:
   api:
-    image: ghcr.io/tngonephetsy-insight/codetocloud-source/fabrikam-api:latest
+    image: ghcr.io/codetocloud-source/fabrikam-api:latest
     ports:
       - "3001:3001"
   web:
-    image: ghcr.io/tngonephetsy-insight/codetocloud-source/fabrikam-web:latest
+    image: ghcr.io/codetocloud-source/fabrikam-web:latest
     depends_on:
       - api
     environment:
