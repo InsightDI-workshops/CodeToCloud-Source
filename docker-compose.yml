@@ -1,6 +1,6 @@
 version: "3.4"
 services:
   api:
-    image: ghcr.io/TNgonephetsy-insight/CodeToCloud-Source/fabrikam-api:latest
+    image: ghcr.io/TNgonephetsy-insight/CodeToCloud-Source/content-api:latest
     ports:
       - "3001:3001"
