@@ -12,4 +12,4 @@ az cosmosdb create --name $cosmosDBName `
 --locations regionName=$location1 failoverPriority=0 isZoneRedundant=False `
 --locations regionName=$location2 failoverPriority=1 isZoneRedundant=True `
 --enable-multiple-write-locations `
---kind MongoDB 
+--kind MongoDB
