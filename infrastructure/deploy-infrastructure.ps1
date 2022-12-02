@@ -3,8 +3,8 @@ $resourcegroupName = "fabmedical-rg-" + $studentprefix
 $cosmosDBName = "fabmedical-cdb-" + $studentprefix
 $webappName = "fabmedical-web-" + $studentprefix
 $planName = "fabmedical-plan-" + $studentprefix
-$location1 = "westeurope"
-$location2 = "northeurope"
+$location1 = "westus3"
+$location2 = "eastus"
 az group create -l $location1 -n $resourcegroupName
 #CosmoDB creation
 az cosmosdb create --name $cosmosDBName `
