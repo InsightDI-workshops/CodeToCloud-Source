@@ -13,3 +13,9 @@ az cosmosdb create --name $cosmosDBName `
 --locations regionName=$location2 failoverPriority=1 isZoneRedundant=True `
 --enable-multiple-write-locations `
 --kind MongoDB
+
+#Creation of the Azure App Service Plan
+az appservice plan create --name $planName --resource-group $resourcegroupName --sku S1 --is-linux
+
+#Create a Azure Web App with NGINX container
+az webapp create --resource-group $resourcegroupName --plan $planName --name $webappName -i nginx
