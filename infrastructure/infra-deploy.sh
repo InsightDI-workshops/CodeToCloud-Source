@@ -2,8 +2,7 @@
 
 GH_ACCESS_TOKEN="$1"
 MONGODB_CONNECTION=$(az cosmosdb keys list -n fabrikam-cdb-aes  -g fabrikam-rg-aes --type connection-strings \
---query "connectionStrings[?description=='Primary MongoDB Connection String'].connectionString" | tr -d '\n',' ','[',']','\"')
-#still need to add name of db in the connection string
+--query "connectionStrings[?description=='Primary MongoDB Connection String'].connectionString" | tr -d '\n',' ','[',']','\"' | sed s/\?/contentdb\?/)
 SUFFIX="aes"
 RESOURCE_GROUP_NAME="fabrikam-rg-"$SUFFIX
 WEBAPP_NAME="fabrikam-webapp-"$SUFFIX
