@@ -18,5 +18,11 @@ az cosmosdb create \
         --enable-multiple-write-locations \
         --kind MongoDB 
 az appservice plan create --name $PLAN_NAME --resource-group $RESOURCE_GROUP_NAME --sku S1 --is-linux
+
 az webapp create --resource-group $RESOURCE_GROUP_NAME --plan $PLAN_NAME --name $WEBAPP_NAME -i nginx
   
+MONGODB_CONNECTION=$(az cosmosdb keys list -n fabrikam-cdb-aes  -g fabrikam-rg-aes --type connection-strings \
+--query "connectionStrings[?description=='Primary MongoDB Connection String'].connectionString" | tr -d '\n',' ','[',']','\"' | sed s/\?/contentdb\?/)
+
+
+echo $MONGODB_CONNECTION
