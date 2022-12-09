@@ -1,5 +1,9 @@
+#!/bin/bash
+
+GH_ACCESS_TOKEN="$1"
 SUFFIX="aes"
 RESOURCE_GROUP_NAME="fabrikam-rg-"$SUFFIX
+WEBAPP_NAME="fabrikam-webapp-"$SUFFIX
 LOCATION1="eastus"
 APP_INSIGHTS="fabrikamai-"$SUFFIX
 
@@ -8,13 +12,13 @@ AI=$(az monitor app-insights component create --app $APP_INSIGHTS --location $LO
 AI_KEY=$(echo $AI | jq -r '.instrumentationKey')
 echo $AI_KEY
 
-sed -i -e "s/^appInsights.setup.*/appInsights\.setup(\"${AI_KEY}\");/" ./content-web/app.js
+sed -i '' "s/^appInsights.setup.*/appInsights\.setup(\"${AI_KEY}\");/" ./content-web/app.js
 
 git add .
 git commit -m "Added Application Insights"
 git push
 
-sleep 200
+sleep 250
 
 az webapp config container set \
     --docker-registry-server-password $GH_ACCESS_TOKEN \
