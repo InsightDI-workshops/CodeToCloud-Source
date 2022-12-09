@@ -4,6 +4,7 @@ GH_ACCESS_TOKEN="$1"
 SUFFIX="aes"
 RESOURCE_GROUP_NAME="fabrikam-rg-"$SUFFIX
 WEBAPP_NAME="fabrikam-webapp-"$SUFFIX
+DB_NAME="fabrikam-cdb-"$SUFFIX
 MONGODB_CONNECTION=$(az cosmosdb keys list -n $DB_NAME  -g $RESOURCE_GROUP_NAME --type connection-strings \
 --query "connectionStrings[?description=='Primary MongoDB Connection String'].connectionString" | tr -d '\n',' ','[',']','\"' | sed s/\?/contentdb\?/)
 docker run -it --rm -e MONGODB_CONNECTION=$MONGODB_CONNECTION ghcr.io/andrewsutliff-insight/fabrikam-init
