@@ -10,6 +10,7 @@ APP_INSIGHTS="fabrikamai-"$SUFFIX
 az extension add --name application-insights
 AI=$(az monitor app-insights component create --app $APP_INSIGHTS --location $LOCATION1 --kind web -g $RESOURCE_GROUP_NAME --application-type web --retention-time 120 -o json)
 AI_KEY=$(echo $AI | jq -r '.instrumentationKey')
+AI_CONNECTION=$(echo $AI | jq -r '.connectionString')
 echo $AI_KEY
 
 sed -i '' "s/^appInsights.setup.*/appInsights\.setup(\"${AI_KEY}\");/" ./content-web/app.js
@@ -28,4 +29,15 @@ az webapp config container set \
     --multicontainer-config-type COMPOSE \
     --name $WEBAPP_NAME \
     --resource-group $RESOURCE_GROUP_NAME \
-    --enable-app-service-storage true
+    --enable-app-service-storage true \
+    --appinsights-instrumentationkey $AI_KEY \
+    --appinsights-profilefeature-version 1.0.0 \
+    --appinsights-snapshotfeature-version 1.0.0 \
+    --applicationinsights-connection-string $AI_CONNECTION \
+    --applicationinsightsagent-extension-version ~2 \
+    --daignostics-services-extension-version ~3 \
+    --instrumentation-engine-extension-version disabled \
+    --snapshotdebugger-extension-version disabled \
+    --xdt-microsoft-applicationinsights-base-extensions disabled \
+    --xdt-microsoft-applicationinsights-mode recommended \
+    --xdt-microsoft-applicationinsights-preempt-sdk disabled
