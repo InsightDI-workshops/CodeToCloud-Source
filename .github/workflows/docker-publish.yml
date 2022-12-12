@@ -56,7 +56,9 @@ jobs:
         creds: ${{secrets.AZURE_CREDENTIALS}}
 
     - name: Set up Azure Infra from IaC
-      run: bash **/infrastructure/init-infrastructure.sh
+      id: infra_setup
+      run: |
+          bash **/infrastructure/init-infrastructure.sh
         
   build:
     runs-on: ubuntu-latest
@@ -72,7 +74,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ github.token }}
+          password: ${{ secrets.PAT }}
 
       - name: Lowercase the repo name and username
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
@@ -87,10 +89,14 @@ jobs:
       contents: none
     runs-on: ubuntu-latest
     needs: build
-    
     steps:
       - uses: azure/login@v1.1
         with:
           creds: ${{secrets.AZURE_CREDENTIALS}}
       - name: Configure the Webapp to Use the New Images
         run: bash **/infrastructure/deploy-infrastructure.sh
+        env:
+          MONGODB_CONNECTION: ${{ steps.infra_setup.output.MONGODB_CONNECTION }}
+          AI_KEY: ${{ steps.infra_setup.output.AI_KEY }}
+          AI_CONNECTION: ${{ steps.infra_setup.output.AI_CONNECTION }}
+          
