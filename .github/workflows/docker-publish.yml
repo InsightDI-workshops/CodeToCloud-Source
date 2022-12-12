@@ -27,13 +27,13 @@
 name: Build and deploy a container to an Azure Web App
 
 env:
-  GH_ACCESS_TOKEN: ${{secrets.PAT}}
+  GH_ACCESS_TOKEN: ${{secrets.CR_PAT}}
   SUFFIX: aes
-  RESOURCE_GROUP_NAME: fabrikam-rg-${{ SUFFIX }}
-  WEBAPP_NAME: fabrikam-webapp-${{ SUFFIX }}
-  PLAN_NAME: fabrikam-plan-${{ SUFFIX }}
-  APP_INSIGHTS: fabrikamai-${{ SUFFIX }}
-  DB_NAME: fabrikam-cdb-${{ SUFFIX }}
+  RESOURCE_GROUP_NAME: fabrikam-rg-${{ env.SUFFIX }}
+  WEBAPP_NAME: fabrikam-webapp-${{ env.SUFFIX }}
+  PLAN_NAME: fabrikam-plan-${{ env.SUFFIX }}
+  APP_INSIGHTS: fabrikamai-${{ env.SUFFIX }}
+  DB_NAME: fabrikam-cdb-${{ env.SUFFIX }}
   LOCATION1: eastus
   LOCATION2: eastus2
 
@@ -74,7 +74,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.PAT }}
+          password: ${{ secrets.CR_PAT }}
 
       - name: Lowercase the repo name and username
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
