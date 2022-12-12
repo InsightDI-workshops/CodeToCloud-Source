@@ -1,9 +1,3 @@
-MONGODB_CONNECTION=$(az cosmosdb keys list -n $DB_NAME  -g $RESOURCE_GROUP_NAME --type connection-strings \
---query "connectionStrings[?description=='Primary MongoDB Connection String'].connectionString" | tr -d '\n',' ','[',']','\"' | sed s/\?/contentdb\?/)
-AI= #need to figure out how to grab the json output of my apinsights
-AI_KEY=$(echo $AI | jq -r '.instrumentationKey')
-AI_CONNECTION=$(echo $AI | jq -r '.connectionString')
-
 az webapp config appsettings set -n $WEBAPP_NAME -g $RESOURCE_GROUP_NAME \
 --settings MONGODB_CONNECTION=$MONGODB_CONNECTION \
     APPINSIGHTS_INSTRUMENTATIONKEY=$AI_KEY \

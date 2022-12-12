@@ -1,14 +1,3 @@
-GH_ACCESS_TOKEN="$1"
-SUFFIX="aes"
-RESOURCE_GROUP_NAME="fabrikam-rg-"$SUFFIX
-WEBAPP_NAME="fabrikam-webapp-"$SUFFIX
-PLAN_NAME="fabrikam-plan-"$SUFFIX
-APP_INSIGHTS="fabrikamai-"$SUFFIX
-DB_NAME="fabrikam-cdb-"$SUFFIX
-LOCATION1="eastus"
-LOCATION2="eastus2"
-
-
 az group create -l $LOCATION1 -n $RESOURCE_GROUP_NAME
 az cosmosdb create \
         --name $DB_NAME \
@@ -32,3 +21,7 @@ AI_KEY=$(echo $AI | jq -r '.instrumentationKey')
 AI_CONNECTION=$(echo $AI | jq -r '.connectionString')
 
 sed -i '' "s/^appInsights.setup.*/appInsights\.setup(\"${AI_KEY}\");/" ./content-web/app.js
+
+echo  "AI_CONNECTION=$AI_CONNECTION" >> $GITHUB_OUTPUT
+echo "AI_KEY=$AI_KEY" >> $GITHUB_OUTPUT
+echo "MONGODB_CONNECTION=$MONGODB_CONNECTION" >> $GITHUB_OUTPUT
