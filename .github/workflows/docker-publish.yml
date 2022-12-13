@@ -50,7 +50,7 @@ jobs:
     - name: Set up Azure Infra from IaC
       id: infra_setup
       run: |
-          bash ./infrastructure/init-infrastructure.sh
+          bash ${GITHUB_WORKSPACE}/infrastructure/init-infrastructure.sh
         
   build:
     runs-on: ubuntu-latest
@@ -86,7 +86,7 @@ jobs:
         with:
           creds: ${{secrets.AZURE_CREDENTIALS}}
       - name: Configure the Webapp to Use the New Images
-        run: bash ./infrastructure/deploy-infrastructure.sh
+        run: bash ${GITHUB_WORKSPACE}/infrastructure/deploy-infrastructure.sh
         env:
           MONGODB_CONNECTION: ${{ steps.infra_setup.output.MONGODB_CONNECTION }}
           AI_KEY: ${{ steps.infra_setup.output.AI_KEY }}
