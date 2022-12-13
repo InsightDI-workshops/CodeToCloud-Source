@@ -46,7 +46,8 @@ jobs:
       uses: azure/login@v1.1
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
-
+    - name: debug
+      run: pwd
     - name: Set up Azure Infra from IaC
       id: infra_setup
       run: |
