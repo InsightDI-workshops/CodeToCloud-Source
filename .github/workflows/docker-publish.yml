@@ -84,6 +84,7 @@ jobs:
       - uses: azure/login@v1.1
         with:
           creds: ${{secrets.AZURE_CREDENTIALS}}
+      - uses: actions/checkout@v3
       - name: Configure the Webapp to Use the New Images
         run: bash ${GITHUB_WORKSPACE}/infrastructure/deploy-infrastructure.sh
         env:
