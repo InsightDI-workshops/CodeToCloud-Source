@@ -90,7 +90,7 @@ jobs:
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
         
       - name: Insert the apinsights key into app.js
-        run: sed -i "s/^appInsights.setup.*/appInsights\.setup(\"${{ AI_KEY }}\");/" ${{ GITHUB_WORKSPACE }}/content-web/app.js
+        run: sed -i "s/^appInsights.setup.*/appInsights\.setup(\"${{ needs.infra_setup.outputs.AI_KEY }}\");/" ${{ GITHUB_WORKSPACE }}/content-web/app.js
 
       - name: Build and push container images to registry
         run: |  
