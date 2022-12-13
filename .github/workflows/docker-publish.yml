@@ -46,15 +46,11 @@ jobs:
       uses: azure/login@v1.1
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
-    - name: debug
-      run: |
-          pwd
-          ls -la
     - name: Set up Azure Infra from IaC
       id: infra_setup
       run: |
           bash ${GITHUB_WORKSPACE}/infrastructure/init-infrastructure.sh
-        
+
   build:
     runs-on: ubuntu-latest
     needs: infra_init
