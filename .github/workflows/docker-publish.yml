@@ -47,7 +47,9 @@ jobs:
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
     - name: debug
-      run: pwd
+      run: |
+          pwd
+          ls -la
     - name: Set up Azure Infra from IaC
       id: infra_setup
       run: |
