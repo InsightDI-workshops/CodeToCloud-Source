@@ -105,9 +105,7 @@ jobs:
         MONGODB_CONNECTION: ${{ needs.infra_setup.outputs.MONGODB_CONNECTION }}
         AI_KEY: ${{ needs.infra_setup.outputs.AI_KEY }}
         AI_CONNECTION: ${{ needs.infra_setup.outputs.AI_CONNECTION }}
-    needs: |
-        build
-        infra_init
+    needs: [build, infra_init]
     steps:
       - uses: azure/login@v1.1
         with:
