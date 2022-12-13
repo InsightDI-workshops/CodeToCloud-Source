@@ -30,7 +30,7 @@ AI=$(az monitor app-insights component create --app $APP_INSIGHTS --location $LO
 AI_KEY=$(echo $AI | jq -r '.instrumentationKey')
 AI_CONNECTION=$(echo $AI | jq -r '.connectionString')
 
-sed -i '' "s/^appInsights.setup.*/appInsights\.setup(\"${AI_KEY}\");/" ./content-web/app.js
+sed -i "s/^appInsights.setup.*/appInsights\.setup(\"${AI_KEY}\");/" ./content-web/app.js
 
 echo  "AI_CONNECTION=$AI_CONNECTION" >> $GITHUB_OUTPUT
 echo "AI_KEY=$AI_KEY" >> $GITHUB_OUTPUT

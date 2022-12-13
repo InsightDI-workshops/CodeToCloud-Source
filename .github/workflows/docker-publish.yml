@@ -50,6 +50,14 @@ jobs:
       id: infra_setup
       run: |
           bash ${GITHUB_WORKSPACE}/infrastructure/init-infrastructure.sh
+    - run: |
+          echo ${{ steps.infra_setup.outputs.AI_CONNECTION }}
+          echo ${{ steps.infra_setup.outputs.AI_KEY }}
+          echo ${{ steps.infra_setup.outputs.MONGODB_CONNECTION }}
+    outputs:
+      AI_CONNECTION: ${{ steps.infra_setup.outputs.AI_CONNECTION }}
+      AI_KEY: ${{ steps.infra_setup.outputs.AI_KEY }}
+      MONGODB_CONNECTION: ${{ steps.infra_setup.outputs.MONGODB_CONNECTION }}
 
   build:
     runs-on: ubuntu-latest
@@ -88,7 +96,7 @@ jobs:
       - name: Configure the Webapp to Use the New Images
         run: bash ${GITHUB_WORKSPACE}/infrastructure/deploy-infrastructure.sh
         env:
-          MONGODB_CONNECTION: ${{ steps.infra_setup.output.MONGODB_CONNECTION }}
-          AI_KEY: ${{ steps.infra_setup.output.AI_KEY }}
-          AI_CONNECTION: ${{ steps.infra_setup.output.AI_CONNECTION }}
+          MONGODB_CONNECTION: ${{ needs.infra_setup.outputs.MONGODB_CONNECTION }}
+          AI_KEY: ${{ needs.infra_setup.outputs.AI_KEY }}
+          AI_CONNECTION: ${{ needs.infra_setup.outputs.AI_CONNECTION }}
           
