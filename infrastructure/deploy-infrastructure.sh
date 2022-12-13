@@ -1,3 +1,13 @@
+SUFFIX="aes"
+RESOURCE_GROUP_NAME="fabrikam-rg-"$SUFFIX
+DB_NAME="fabrikam-cdb-"$SUFFIX
+WEBAPP_NAME="fabrikam-webapp-"$SUFFIX
+PLAN_NAME="fabrikam-plan-"$SUFFIX
+APP_INSIGHTS="fabrikamai-"$SUFFIX
+LOCATION1="eastus"
+LOCATION2="eastus2"
+
+
 az webapp config appsettings set -n $WEBAPP_NAME -g $RESOURCE_GROUP_NAME \
 --settings MONGODB_CONNECTION=$MONGODB_CONNECTION \
     APPINSIGHTS_INSTRUMENTATIONKEY=$AI_KEY \
