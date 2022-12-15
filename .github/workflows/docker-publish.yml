@@ -31,8 +31,8 @@ env:
 
 on:
   push:
-    branches:
-      - main
+    branches-ignore:
+      - '**'
   workflow_dispatch:
 
 permissions:
