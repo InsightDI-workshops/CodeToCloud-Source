@@ -32,6 +32,3 @@ AI_CONNECTION=$(echo $AI | jq -r '.connectionString')
 
 sed -i "s/^appInsights.setup.*/appInsights\.setup(\"${AI_KEY}\");/" ./content-web/app.js
 
-echo  "AI_CONNECTION=$AI_CONNECTION" >> $GITHUB_OUTPUT
-echo "AI_KEY=$AI_KEY" >> $GITHUB_OUTPUT
-echo "MONGODB_CONNECTION=$MONGODB_CONNECTION" >> $GITHUB_OUTPUT
