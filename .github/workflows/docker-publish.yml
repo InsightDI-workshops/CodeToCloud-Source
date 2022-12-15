@@ -64,10 +64,9 @@ jobs:
       id: infra_setup
       run: |
           bash ${GITHUB_WORKSPACE}/infrastructure/init-infrastructure.sh
-    - run: |
-          echo ${{ steps.infra_setup.outputs.AI_CONNECTION }}
-          echo ${{ steps.infra_setup.outputs.AI_KEY }}
-          echo ${{ steps.infra_setup.outputs.MONGODB_CONNECTION }}
+          echo  "AI_CONNECTION=$AI_CONNECTION" >> $GITHUB_OUTPUT
+          echo "AI_KEY=$AI_KEY" >> $GITHUB_OUTPUT
+          echo "MONGODB_CONNECTION=$MONGODB_CONNECTION" >> $GITHUB_OUTPUT
 
   build:
     runs-on: ubuntu-latest
