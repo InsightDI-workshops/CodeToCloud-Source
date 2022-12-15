@@ -45,6 +45,7 @@ stages:
           AI_KEY: $(AI_KEY)
     - job: 'BuildAndpublish'
       displayName: 'Build and Publish'
+      dependsOn: InsertAppInsightsKey
       steps:
       - checkout: self
       - task: DockerCompose@0
