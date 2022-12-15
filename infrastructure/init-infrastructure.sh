@@ -32,3 +32,7 @@ AI_CONNECTION=$(echo $AI | jq -r '.connectionString')
 
 sed -i "s/^appInsights.setup.*/appInsights\.setup(\"${AI_KEY}\");/" ./content-web/app.js
 
+export  AI_CONNECTION=$AI_CONNECTION
+export AI_KEY=$AI_KEY
+export MONGODB_CONNECTION=$MONGODB_CONNECTION
+
