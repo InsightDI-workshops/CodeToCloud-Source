@@ -31,8 +31,8 @@ env:
 
 on:
   push:
-    branches-ignore:
-      - '**'
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -91,7 +91,7 @@ jobs:
         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
         
       - name: Insert the apinsights key into app.js
-        run: sed -i "s/^appInsights.setup.*/appInsights\.setup(\"${{ needs.infra_setup.outputs.AI_KEY }}\");/" ${GITHUB_WORKSPACE}/content-web/app.js
+        run: sed -i "s/^appInsights.setup.*/appInsights\.setup(\"${{ needs.infra_init.outputs.AI_KEY }}\");/" ${GITHUB_WORKSPACE}/content-web/app.js
 
       - name: Build and push container images to registry
         run: |  
@@ -103,9 +103,9 @@ jobs:
       contents: none
     runs-on: ubuntu-latest
     env:
-        MONGODB_CONNECTION: ${{ needs.infra_setup.outputs.MONGODB_CONNECTION }}
-        AI_KEY: ${{ needs.infra_setup.outputs.AI_KEY }}
-        AI_CONNECTION: ${{ needs.infra_setup.outputs.AI_CONNECTION }}
+        MONGODB_CONNECTION: ${{ needs.infra_init.outputs.MONGODB_CONNECTION }}
+        AI_KEY: ${{ needs.infra_init.outputs.AI_KEY }}
+        AI_CONNECTION: ${{ needs.infra_init.outputs.AI_CONNECTION }}
     needs: [build, infra_init]
     steps:
       - uses: azure/login@v1.1
