@@ -23,8 +23,9 @@ az webapp create --resource-group $RESOURCE_GROUP_NAME --plan $PLAN_NAME --name 
 
 MONGODB_CONNECTION=$(az cosmosdb keys list -n $DB_NAME  -g $RESOURCE_GROUP_NAME --type connection-strings \
 --query "connectionStrings[?description=='Primary MongoDB Connection String'].connectionString" | tr -d '\n',' ','[',']','\"' | sed s/\?/contentdb\?/)
-docker run -it --rm -e MONGODB_CONNECTION=$MONGODB_CONNECTION ghcr.io/andrewsutliff-insight/fabrikam-init
+docker run --rm -e MONGODB_CONNECTION=$MONGODB_CONNECTION ghcr.io/andrewsutliff-insight/fabrikam-init
 
+az extension add --name application-insights
 AI=$(az monitor app-insights component show --app $APP_INSIGHTS --resource-group $RESOURCE_GROUP_NAME)
 AI_KEY=$(echo $AI | jq -r '.instrumentationKey')
 AI_CONNECTION=$(echo $AI | jq -r '.connectionString')
