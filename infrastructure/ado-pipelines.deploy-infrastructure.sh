@@ -1,3 +1,4 @@
+GH_ACCESS_TOKEN=$CR_PAT
 SUFFIX="aes"
 RESOURCE_GROUP_NAME="fabrikam-rg-"$SUFFIX
 DB_NAME="fabrikam-cdb-"$SUFFIX
