@@ -1,8 +1,35 @@
+
+trigger:
+- master
+
 pool:
-  vmImage: ubuntu-latest
+  vmImmage: 'ubuntu-latest'
 
 stages:
-  - stage: InitProd
+  - stage: build
+    jobs:
+    - job: 'BuildAndpublish'
+      displayName: 'Build and Publish'
+      steps:
+        - task: DockerCompose@0
+          inputs:
+            containerregistrytype: 'Container Registry'
+            dockerRegistryEndpoint: 'GitHub Container Registry'
+            dockerComposeFile: '**/docker-compose.yml'
+            additionalDockerComposeFiles: 'build.docker-compose.yml'
+            action: 'Build services'
+            additionalImageTags: '$(Build.BuildNumber)'
+        - task: DockerCompose@0
+          inputs:
+            containerregistrytype: 'Container Registry'
+            dockerRegistryEndpoint: 'GitHub Container Registry'
+            dockerComposeFile: '**/docker-compose.yml'
+            additionalDockerComposeFiles: 'build.docker-compose.yml'
+            action: 'Push services'
+            additionalImageTags: '$(Build.BuildNumber)'
+
+  - stage: DeployProd
+    dependsOn: build
     jobs:
     - deployment: infrastructure
       environment: production
@@ -11,81 +38,15 @@ stages:
           deploy:
             steps:
               - checkout: self
+              - task: Docker@2
+                inputs:
+                  containerRegistry: 'GitHub Container Registry'
+                  command: 'login'
               - task: AzureCLI@2
                 inputs:
-                  azureSubscription: 'Visual Studio Enterprise Subscription(fd66b37e-19f7-4076-b116-86e68b57ddc2)'
+                  azureSubscription: 'Fabrikam-Azure'
                   scriptType: 'bash'
                   scriptLocation: 'scriptPath'
-                  scriptPath: './infrastructure/init-infrastructure.sh'
+                  scriptPath: './infrastructure/ado-pipelines.deploy-infrastructure.sh'
                 env:
                   CR_PAT: $(CR_PAT)
-              - task: Bash@3
-                name: SetOutputs
-                inputs:
-                  targetType: inline
-                  script: |
-                    echo "##vso[task.setvariable variable=AI_CONNECTION;isOutput=true;]$AI_CONNECTION"
-                    echo "##vso[task.setvariable variable=AI_KEY;isOutput=true;]$AI_KEY"
-                    echo "##vso[task.setvariable variable=MONGODB_CONNECTION;isOutput=true;]$MONGODB_CONNECTION"
-  - stage: build
-    dependsOn: InitProd
-    jobs:
-    - job: 'InsertAppInsightsKey'
-      displayName: 'Insert App Insights Key into App' 
-      variables:
-        AI_KEY: $[infrastructure.SetOutputs.AI_KEY]
-      steps: 
-      - checkout: self
-      - task: Bash@3
-        inputs:
-          targetType: 'inline'
-          script: |
-            sed -i "s/^appInsights\.setup.*/appInsights\.setup(\"${ AI_KEY }\");/" ./content-web/app.js
-        env:
-          AI_KEY: $(AI_KEY)
-    - job: 'BuildAndpublish'
-      displayName: 'Build and Publish'
-      dependsOn: InsertAppInsightsKey
-      steps:
-      - checkout: self
-      - task: DockerCompose@0
-        inputs:
-          containerregistrytype: 'Container Registry'
-          dockerRegistryEndpoint: 'GitHub Container Registry'
-          dockerComposeFile: '**/docker-compose.yml'
-          additionalDockerComposeFiles: 'build.docker-compose.yaml'
-          action: 'Build services'
-          additionalImageTags: '$(Build.BuildNumber)'
-      - task: DockerCompose@0
-        inputs:
-          containerregistrytype: 'Container Registry'
-          dockerRegistryEndpoint: 'GitHub Container Registry'
-          dockerComposeFile: '**/docker-compose.yml'
-          additionalDockerComposeFiles: 'build.docker-compose.yaml'
-          action: 'Push services'
-          additionalImageTags: '$(Build.BuildNumber)'
-
-  - stage: DeployProd
-    dependsOn: [build, InitProd]
-    jobs:
-    - deployment: infrastructureConfig
-      environment: production
-      variables: 
-        MONGODB_CONNECTION: $[infrastructure.SetOutputs.MONGODB_CONNECTION]
-        AI_KEY: $[infrastructure.SetOutputs.AI_KEY]
-        AI_CONNECTION: $[infrastructure.SetOutputs.AI_CONNECTION]
-      strategy:
-        runOnce:
-          deploy:
-            steps:
-              - checkout: self
-              - task: AzureCLI@2
-                inputs:
-                  azureSubscription: 'Visual Studio Enterprise Subscription(fd66b37e-19f7-4076-b116-86e68b57ddc2)'
-                  scriptType: 'bash'
-                  scriptLocation: 'scriptPath'
-                  scriptPath: 'infrastructure/deploy-infrastructure.sh'
-                env:
-                  MONGODB_CONNECTION: $(MONGODB_CONNECTION)
-                  AI_KEY: $(AI_KEY)
-                  AI_CONNECTION: $(AI_CONNECTION)
