@@ -3,7 +3,7 @@ trigger:
 - master
 
 pool:
-  vmImmage: 'ubuntu-latest'
+  vmImage: 'ubuntu-latest'
 
 stages:
   - stage: build
