@@ -44,7 +44,7 @@ stages:
                   command: 'login'
               - task: AzureCLI@2
                 inputs:
-                  azureSubscription: 'Fabrikam-Azure'
+                  azureSubscription: 'fd66b37e-19f7-4076-b116-86e68b57ddc2'
                   scriptType: 'bash'
                   scriptLocation: 'scriptPath'
                   scriptPath: './infrastructure/ado-pipelines.deploy-infrastructure.sh'
